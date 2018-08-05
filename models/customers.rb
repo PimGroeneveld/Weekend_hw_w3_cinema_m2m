@@ -57,5 +57,22 @@ class Customer
     return films.map {|film| Film.new(film)}
   end
 
+  # --- extensions
+  #Buying ticket
+  #Somehow this function was first only working for customer1 (from 100 to 97), and not for cust2, and after re-running the console it only works for cust2 and not for cust1? They should be identical so not idea where the problem lies
+  def buy_ticket()
+    sql = "SELECT SUM (films.price) FROM films INNER JOIN tickets ON films.price = tickets.film_id WHERE tickets.customer_id = $1"
+    values = [@id]
+    result = SqlRunner.run(sql, values).first
+    return @funds - result['sum'].to_i
+  end
+
+  def film_count()
+    sql = "SELECT films.* FROM films INNER JOIN tickets ON films.id = tickets.film_id WHERE tickets.customer_id = $1"
+    values = [@id]
+    films = SqlRunner.run(sql, values)
+    return films.count
+  end
+
 
 end

@@ -49,5 +49,22 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
+  #-----------
+  #Which customer belongs to which ticket
+  def customer()  #in the tickets (join) table so we can grab customer_id easily, the _id's are already bundled in this table
+    sql = "SELECT * FROM customers WHERE id = $1"
+    values  = [@customer_id]
+    customer = SqlRunner.run(sql, values).first
+    return Customer.new(customer)
+  end
+
+  #which film belongs to which ticket
+  def film()
+    sql = "SELECT * FROM films WHERE id = $1"
+    values = [@film_id]
+    film = SqlRunner.run(sql, values).first
+    return Film.new(film)
+  end
+
 
 end
